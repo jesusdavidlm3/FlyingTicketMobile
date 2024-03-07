@@ -1,18 +1,33 @@
 import authLogo from '../img/icons/auth.png'
 import { Button, TextField } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { hash } from '../functions/encrypt'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { context } from '../context/context'
+import { useContext } from 'react'
+import { doc, getDoc } from 'firebase/firestore'
+import { auth } from '../../firebase'
+import { db } from '../../firebase'
 
 const Login = () => {
 
     const navigate = useNavigate()
+    const { setUserInfo } = useContext(context)
 
     async function handleSubmit(e){
         e.preventDefault()
         const userEmail = e.target[0].value;
-        const userPassword = await hash(e.target[1].value);
-        console.log(userPassword)
-        navigate('/checking')
+        const userPassword =  e.target[2].value;
+
+        signInWithEmailAndPassword(auth, userEmail, userPassword)
+        .then(async (userCredential) => {
+            const user = userCredential.user;
+            if(user != null){
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                setUserInfo(docSnap.data())
+                navigate('/checking')
+            }
+        })
     }
 
     return(

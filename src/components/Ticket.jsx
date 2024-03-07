@@ -7,6 +7,7 @@ export const Ticket = ({close}) => {
             <Atropos>
                 <div className='ticket'>
                     <p>Nombre: </p>
+                    <p>Identificacion</p>
                     <p>Vuelo: </p>
                     <p>Destino: </p>
                     <p>Origen: </p>

@@ -3,6 +3,9 @@ import authLogo from '../img/icons/auth.png'
 import { useState } from 'react'
 import successLogo from '../img/icons/success.png'
 import { useNavigate } from 'react-router-dom'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
+import { auth, db } from '../../firebase'
 
 const Register = () => {
 
@@ -11,11 +14,22 @@ const Register = () => {
 
     async function handleSubmit(e){
         e.preventDefault()
-        const userEmail = e.target[0].value;
-        const userRealName = e.target[1].value;
-        const userIdentity = e.target[2].value;
-        const userPassword = e.target[3].value;
-        setSuccess(true)
+        const userEmail = e.target[0].value
+        const userRealName = e.target[2].value
+        const userId = e.target[4].value
+        const userPassword = e.target[6].value
+        
+        createUserWithEmailAndPassword(auth, userEmail, userPassword)
+        .then(async (userCredential) => {
+            const user = userCredential.user;
+            if(user != null){
+                await setDoc(doc(db, "users", user.uid), {
+                    name: userRealName,
+                    userId: userId,
+                });
+                setSuccess(true)
+            }
+        })
     }
 
     return(
@@ -33,7 +47,7 @@ const Register = () => {
                     <h1>Registro</h1>
                     <form onSubmit={handleSubmit}>
                         <TextField variant='outlined' label='Correo Electronico' type='email'/>
-                        <TextField variant='outlined' label='Nombre' type='email'/>
+                        <TextField variant='outlined' label='Nombre'/>
                         <TextField variant='outlined' label='Identificacion' type='number'/>
                         <TextField variant='outlined' label='Contraseña' type='password'/>
                         <Button type='submit' variant='contained'>Registrarse</Button>

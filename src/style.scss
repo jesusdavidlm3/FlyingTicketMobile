@@ -136,23 +136,23 @@ body{
         align-items: center;
 
         .ticket{
-            width: 85vw;
-            height: 80vh;
+            width: 400px;
+            height: 770px;
             background-image: url(./img/ticket.png);
-            background-size: 85vw;
+            background-size: 400px;
             background-repeat: no-repeat;
     
             p{
                 color: gray;
                 position: relative;
-                top: 25%;
+                top: 200px;
                 left: 10%;
             }
 
             Button{
                 position: relative;
-                top: 30%;
-                left: 35%;
+                top: 300px;
+                left: 150px;
             }
         }
     }

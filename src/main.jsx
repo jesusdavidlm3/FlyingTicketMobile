@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import ErrorPage from './routes/ErrorPage'
 import Root from './routes/Root'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import ContextProvider from './context/contextProvider'
 import Home from './routes/Home'
 import Buy from './routes/Buy'
 import Checking from './routes/Checking'
@@ -46,5 +47,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <RouterProvider router={router} />
+    <ContextProvider>
+      <RouterProvider router={router} />
+    </ContextProvider>
 )
