@@ -123,6 +123,45 @@ body{
     justify-content: center;
     align-items: center;
     background-color: lightblue;
+    text-align: center;
+
+    .buttons{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .listContainer{
+        width: calc(90vw - 30px);
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 15px;
+        // background-color: #597081;
+        border-radius: 20px;
+        padding: 15px;
+        gap: 15px;
+        overflow-y: scroll;
+
+        .OneTicket{
+            background-color: #7ea0b7;
+            width: calc(90vw - 20px);
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            border-radius: 10px;
+
+            .info{
+                text-align: start;
+                p{
+                    margin: 0px;
+                }
+            }
+        }
+    }
 
     .ticketContainer{
         z-index: 15;
