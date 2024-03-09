@@ -14,7 +14,10 @@ const Checking = () => {
     const [showBuy, setShowBuy] = useState(false)
     const [showCheck, setShowCheck] = useState(false)
     const [showTickets, setShowTickets] = useState([])
+    const [showTickets2, setShowTickets2] = useState([])
     let tickets = []
+    let ticketToGetInfo = []
+    const [infoVuelo, setInfoVuelo] = useState('')
 
 
     async function wannaCheck(){
@@ -23,12 +26,15 @@ const Checking = () => {
 
         const q = query(collection(db, "tickets"), where("comprador", "==", userInfo.userId));
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (doc1) => {
-            const docRef = doc(db, "vuelos", doc1.data().vuelo);
-            const doc = await getDocFromCache(docRef);
-            tickets = [...tickets, doc.data()]
+        querySnapshot.forEach(async (doc) => {
+            ticketToGetInfo = [...ticketToGetInfo, doc.data()]
         });
-        setShowTickets(tickets)
+        ticketToGetInfo.map( async (ticketInfo) => {
+            const docRef = doc(db, "vuelos", ticketInfo.vuelo);
+            const docSnap = await getDoc(docRef);
+            tickets = [...tickets, docSnap.data()]
+            setShowTickets2(tickets)
+        } )
     }
 
     async function wannaBuy(){
@@ -38,14 +44,14 @@ const Checking = () => {
         const querySnapshot = await getDocs(collection(db, 'vuelos'));
         querySnapshot.forEach((doc) => {
         tickets = [...tickets, doc.data()]
-        console.log(doc.data())
         });
         setShowTickets(tickets);
     }
         
 
-    async function openCloseTicket(){
+    async function openCloseTicket(ticketInfo){
         setOpenTicket(!openTicket)
+        setInfoVuelo(ticketInfo)
     }
 
     return(
@@ -57,35 +63,34 @@ const Checking = () => {
             </div>
 
             { showBuy && <div className='listContainer'>
-                { showTickets.map( (ticket) => (
+                { showTickets.map( (ticketsToBuy) => (
                     <div className='OneTicket'>
                         <div className='info'>
-                            <p>Destino: {ticket.destino}</p>
+                            <p>Destino: {ticketsToBuy.destino}</p>
                             <p>Hora:</p>
-                            <p>Duracion: {ticket.duracion}</p>
+                            <p>Duracion: {ticketsToBuy.duracion}</p>
                         </div>
 
                         <Button variant='contained'>comprar</Button>
-                        {/* <h4>{ticket.hora.toLocaleDateString()}</h4> */}
                     </div>
                 ) ) }
             </div> }
 
-            { showCheck && <div className='list Container'>
-                { showTickets.map( (ticket) => (
+            { showCheck && <div className='listContainer'>
+                { showTickets2.map( (ticketsToCheck) => (
                     <div className='OneTicket'>
                         <div className='info'>
-                            <p>Destino: {ticket.destino}</p>
-                            <p>Hora:</p>
-                            <p>Duracion: {ticket.duracion}</p>
-                        </div>
+                            <p>Destino: {ticketsToCheck.destino}</p>
+                            <p>Hora: </p>
+                            <p>Duracion: {ticketsToCheck.duracion}</p>
+                        </div> 
 
-                        <Button variant='contained'>Visualizar</Button>
+                        <Button variant='contained' onClick={ () => openCloseTicket(ticketsToCheck)}>Visualizar</Button>
                     </div>
                 ) ) }
             </div> }
 
-            { openTicket && <Ticket close={openCloseTicket}/> }
+            { openTicket && <Ticket infoVuelo={infoVuelo} close={openCloseTicket}/> }
 
         </div>
     )

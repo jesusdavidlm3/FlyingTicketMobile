@@ -132,7 +132,7 @@ body{
     }
 
     .listContainer{
-        width: calc(90vw - 30px);
+        width: 100vw;
         height: 70vh;
         display: flex;
         align-items: center;
@@ -140,19 +140,18 @@ body{
         margin-top: 15px;
         // background-color: #597081;
         border-radius: 20px;
-        padding: 15px;
         gap: 15px;
         overflow-y: scroll;
 
         .OneTicket{
             background-color: #7ea0b7;
-            width: calc(90vw - 20px);
+            width: calc(93vw - 20px);
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
+            padding: 15px;
             display: flex;
             flex-direction: row;
-            border-radius: 10px;
+            border-radius: 20px;
 
             .info{
                 text-align: start;
@@ -175,23 +174,27 @@ body{
         align-items: center;
 
         .ticket{
-            width: 400px;
-            height: 770px;
+            width: 335px;
+            height: 100vh;
+            align-self: center;
+            justify-self: center;
             background-image: url(./img/ticket.png);
-            background-size: 400px;
+            background-size: 335px;
             background-repeat: no-repeat;
     
             p{
+                text-align: start;
+                margin: 0px;
                 color: gray;
                 position: relative;
-                top: 200px;
-                left: 10%;
+                top: 160px;
+                left: 40px;
             }
 
             Button{
                 position: relative;
                 top: 300px;
-                left: 150px;
+                left: 0px;
             }
         }
     }
