@@ -10,15 +10,16 @@ export const Ticket = ({close, infoVuelo}) => {
 
     return(
         <div className="ticketContainer">
-            <Atropos>
+            <Atropos duration={100}>
                 <div className='ticket'>
                     <p>Nombre: {userInfo.name}</p>
                     <p>Identificacion: {userInfo.userId}</p>
-                    <p>Vuelo: </p>
-                    <p>Destino: {infoVuelo.destino}</p>
-                    <p>Origen: {infoVuelo.origen}</p>
-                    <p>Hora de salida:</p>
-                    <p>Duracion: {infoVuelo.duracion}</p>
+                    <p>Vuelo: {infoVuelo.id}</p>
+                    <p>Estado: {infoVuelo.data.estado}</p>
+                    <p>Destino: {infoVuelo.data.destino}</p>
+                    <p>Origen: {infoVuelo.data.origen}</p>
+                    <p>Fecha: {infoVuelo.data.fecha}</p>
+                    <p>Duracion: {infoVuelo.data.duracion}</p>
 
                     <Button onClick={close} variant="contained" color="error">Cerrar</Button>
                 </div>

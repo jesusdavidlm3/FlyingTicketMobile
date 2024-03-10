@@ -6,11 +6,13 @@ import { context } from '../context/context'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { useEffect } from 'react'
+import { BuyModal } from '../components/BuyModal'
 
 const Checking = () => {
 
     const { userInfo } = useContext(context)
     const [openTicket, setOpenTicket] = useState(false)
+    const [buyTicket, setBuyTicket] = useState(false)
     const [showBuy, setShowBuy] = useState(false)
     const [showCheck, setShowCheck] = useState(false)
     const [showTickets, setShowTickets] = useState([])
@@ -32,7 +34,7 @@ const Checking = () => {
         ticketToGetInfo.map( async (ticketInfo) => {
             const docRef = doc(db, "vuelos", ticketInfo.vuelo);
             const docSnap = await getDoc(docRef);
-            tickets = [...tickets, docSnap.data()]
+            tickets = [...tickets, {data: docSnap.data(), id: docSnap.id}]
             setShowTickets2(tickets)
         } )
     }
@@ -43,7 +45,7 @@ const Checking = () => {
 
         const querySnapshot = await getDocs(collection(db, 'vuelos'));
         querySnapshot.forEach((doc) => {
-        tickets = [...tickets, doc.data()]
+        tickets = [...tickets, {data: doc.data(), id: doc.id}]
         });
         setShowTickets(tickets);
     }
@@ -51,6 +53,11 @@ const Checking = () => {
 
     async function openCloseTicket(ticketInfo){
         setOpenTicket(!openTicket)
+        setInfoVuelo(ticketInfo)
+    }
+
+    async function openCloseBuy(ticketInfo){
+        setBuyTicket(!buyTicket)
         setInfoVuelo(ticketInfo)
     }
 
@@ -64,14 +71,14 @@ const Checking = () => {
 
             { showBuy && <div className='listContainer'>
                 { showTickets.map( (ticketsToBuy) => (
-                    <div className='OneTicket'>
+                    <div key={ticketsToBuy.data.destino} className='OneTicket'>
                         <div className='info'>
-                            <p>Destino: {ticketsToBuy.destino}</p>
-                            <p>Hora:</p>
-                            <p>Duracion: {ticketsToBuy.duracion}</p>
+                            <p>Destino: {ticketsToBuy.data.destino}</p>
+                            <p>{ticketsToBuy.data.fecha}</p>
+                            <p>Duracion: {ticketsToBuy.data.duracion}</p>
                         </div>
 
-                        <Button variant='contained'>comprar</Button>
+                        <Button variant='contained' onClick={ () => openCloseBuy(ticketsToBuy) }>comprar</Button>
                     </div>
                 ) ) }
             </div> }
@@ -80,9 +87,9 @@ const Checking = () => {
                 { showTickets2.map( (ticketsToCheck) => (
                     <div className='OneTicket'>
                         <div className='info'>
-                            <p>Destino: {ticketsToCheck.destino}</p>
-                            <p>Hora: </p>
-                            <p>Duracion: {ticketsToCheck.duracion}</p>
+                            <p>Destino: {ticketsToCheck.data.destino}</p>
+                            <p>{ticketsToCheck.data.fecha}</p>
+                            <p>Duracion: {ticketsToCheck.data.duracion}</p>
                         </div> 
 
                         <Button variant='contained' onClick={ () => openCloseTicket(ticketsToCheck)}>Visualizar</Button>
@@ -91,6 +98,7 @@ const Checking = () => {
             </div> }
 
             { openTicket && <Ticket infoVuelo={infoVuelo} close={openCloseTicket}/> }
+            { buyTicket && <BuyModal infoVuelo={infoVuelo} close={openCloseBuy}/> }
 
         </div>
     )
