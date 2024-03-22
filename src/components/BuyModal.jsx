@@ -8,6 +8,7 @@ import { db } from '../../firebase'
 export const BuyModal = ({close, infoVuelo}) => {
 
     const [bought, setBought] = useState(false)
+    const [idCompra, setIdComra] = useState('')
     const { userInfo } = useContext(context)
 
     async function handleBuy(){
@@ -17,6 +18,7 @@ export const BuyModal = ({close, infoVuelo}) => {
         })
         if(docref != null){
             setBought(true)
+            setIdComra(docref.id)
         }
 
 
@@ -28,6 +30,8 @@ export const BuyModal = ({close, infoVuelo}) => {
                 { bought ? (
                     <>
                         <h3>Compra realizada con exito</h3>
+                        <p>el ID de su ticket es</p>
+                        <p>{idCompra}</p>
                         <img src={successLogo}/>
                         <Button onClick={close} variant="contained" >Cerrar</Button>
                     </>

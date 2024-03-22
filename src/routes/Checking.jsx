@@ -19,6 +19,7 @@ const Checking = () => {
     const [showTickets2, setShowTickets2] = useState([])
     let tickets = []
     let ticketToGetInfo = []
+    const [ticketId, setTicketId] = useState([])
     const [infoVuelo, setInfoVuelo] = useState('')
 
 
@@ -30,6 +31,7 @@ const Checking = () => {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach(async (doc) => {
             ticketToGetInfo = [...ticketToGetInfo, doc.data()]
+            setTicketId([...ticketId, doc.id()])
         });
         ticketToGetInfo.map( async (ticketInfo) => {
             const docRef = doc(db, "vuelos", ticketInfo.vuelo);
